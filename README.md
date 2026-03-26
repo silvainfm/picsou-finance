@@ -9,6 +9,7 @@ Self-hosted, open-source, single-user. Construit avec Spring Boot + React.
 ## Statut du projet
 
 > **Pré-release publique** — L'application est partagée en l'état pour permettre à la communauté de contribuer. Elle est fonctionnelle pour un usage personnel mais manque encore de polish et de couverture de tests. Elle s'améliorera avec le temps et les contributions de chacun. N'hésitez pas à ouvrir des issues ou des pull requests !
+> Le projet a été complétement vibecodé sur le frontend et en partie sur le back-end, c'est un projet perso sans prise de tête d'ou mon énorme disclaimer à ce sujet. Le temps fera son travail.
 
 ---
 
