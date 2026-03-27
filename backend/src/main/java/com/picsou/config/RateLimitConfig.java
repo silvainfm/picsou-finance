@@ -4,6 +4,7 @@ import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.Duration;
 import java.util.Map;
@@ -12,13 +13,17 @@ import java.util.concurrent.ConcurrentHashMap;
 @Configuration
 public class RateLimitConfig {
 
+    private final Map<String, Bucket> loginBucketsMap = new ConcurrentHashMap<>();
+    private final Map<String, Bucket> syncBucketsMap = new ConcurrentHashMap<>();
+    private final Map<String, Bucket> trAuthBucketsMap = new ConcurrentHashMap<>();
+
     /**
      * Per-IP login rate limiter: 5 attempts per 15 minutes.
      * Uses a ConcurrentHashMap of Bucket4j buckets keyed by IP address.
      */
     @Bean("loginBuckets")
     public Map<String, Bucket> loginBuckets() {
-        return new ConcurrentHashMap<>();
+        return loginBucketsMap;
     }
 
     /**
@@ -26,7 +31,7 @@ public class RateLimitConfig {
      */
     @Bean("syncBuckets")
     public Map<String, Bucket> syncBuckets() {
-        return new ConcurrentHashMap<>();
+        return syncBucketsMap;
     }
 
     /**
@@ -35,7 +40,15 @@ public class RateLimitConfig {
      */
     @Bean("trAuthBuckets")
     public Map<String, Bucket> trAuthBuckets() {
-        return new ConcurrentHashMap<>();
+        return trAuthBucketsMap;
+    }
+
+    /** Evict all rate-limit buckets every hour to prevent unbounded memory growth. */
+    @Scheduled(fixedRate = 3600000)
+    public void evictStaleBuckets() {
+        loginBucketsMap.clear();
+        syncBucketsMap.clear();
+        trAuthBucketsMap.clear();
     }
 
     public static Bucket createLoginBucket() {

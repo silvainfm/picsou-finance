@@ -28,7 +28,7 @@ services:
     environment:
       # Only variables that need Docker Compose interpolation (JDBC URL construction)
       # All other vars (including those with $ or \n) come from env_file as-is
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}?sslmode=prefer
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}?sslmode=require
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
